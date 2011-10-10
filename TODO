@@ -1,0 +1,16 @@
+REQUIRED
+
+0. Submit to GitHub
+1. Unit tests
+2. Clean up 1D and 3D samples
+3. Refactor Visualizer
+3. Extend Visualizer to work with 1D and 3D samples
+4. Update README file
+5. Remove runner
+6. Clean up MANIFEST.in and setup.py
+7. Documentation
+
+OPTIONAL
+
+A. Test with a large data set
+B. Make Visualizer pretty

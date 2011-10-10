@@ -1,0 +1,6 @@
+##Main runner for the application
+##Imports project modules and calls an initialization function
+
+import main_package.module
+
+main_package.module.start()

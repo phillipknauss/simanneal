@@ -1,0 +1,21 @@
+A basic application template for packing Python modules with distutils.
+
+Files:
+
+MANIFEST.in		-	Defines what will be in the final installer tarball (see note 1)
+README			-	This file
+runner			-	Python script to import this application's modules and launch
+setup.py		-	distutil setup file
+main_package/	-	Application package root
+	__init__.py	-	Used by distutils to find the package root, should be empty
+	module.py	-	Sample module which finds the associated resources
+	resources/	-	Folder for static resources
+
+Note 1: setup.py
+Copied from http://wiki.python.org/moin/Distutils/Tutorial
+"It has a limited syntax (see the docs),but basically:
+
+include - pick up files (by glob or name) relative to the root.
+recursive-include path file - pick up files (by name or glob) recursively under the given path.
+You do not have to include any .py files in your package-root folder. You do have to include the runner script because it has no .py extension. (I am not sure if it would pick up .py files in the root.)"
+
