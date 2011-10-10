@@ -1,5 +1,14 @@
 A reusable implementation of the Simulated Annealing metaheuristic for optimization problems
 
+Installation:
+
+1. Run build.bat (creates dist/ folder if absent)
+2. Change to dist/ and unpack compressed distribution
+3. Change to unpacked distribution folder
+4. run: setup.py install
+
+This will install the simaneal package to Libs/site-packages
+
 Files:
 
 MANIFEST.in		-	Defines what will be in the final installer tarball
