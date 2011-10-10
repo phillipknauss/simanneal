@@ -11,7 +11,11 @@ simanneal/		-	Simulated Annealing Package
 	Annealer.py	-	Core implementation
 	samples/	-	Sample package
 		__init__.py		-	Used by distutils to find the package root, should be empty
+		samplebase.py	-	Base class for samples, implements some simple defaults, children should only override what changes
 		trivial.py		-	Sample of using Annealer to optimize a small one-dimensional array
 		twodimensional.py	-	Sample of using Annealer to optimize a small two-dimensional array
 		threedimensional.py	-	Guess what this does.
 		visualizer.py		-	tkinter-based visualizer with threading for Annealer results (reusable for other data)
+	tests/		-	Unit tests
+		Annealer.py			- Unit tests for the core Annealer module
+		twodimensional.py	- Unit tests for Sample, as implemented in twodimesional (yeah, unusual)
