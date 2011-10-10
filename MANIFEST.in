@@ -1,3 +1,3 @@
 include *.py
-include runner README TODO
+include runner README TODO REFERENCES
 recursive-include simanneal/resources *
