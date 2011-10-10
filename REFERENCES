@@ -1,0 +1,15 @@
+This implementation of Simulated Annealing is based on information from the following papers and websites
+
+Papers
+	
+	Kirkpatrick, S., Gelatt Jr., C. D., Vecchi, M. P. (1983). Optimization by simulated annealing. 
+		Science, 220(4598), 671-680.
+	
+	Nascimento, M., Cruz, C. D., Peternelli, L. A., Campana, A. C. M., (2010). Comparison between simulated annealing algorithms and rapid chain delineation in the construction of genetic maps.
+		Genetics and Molecular Biology, 33(2), 398-407.
+
+Websites
+
+	Simulated annealing example in C#. 
+		http://www.codeproject.com/KB/recipes/SimulatedAnnealing.aspx
+	
