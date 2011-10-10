@@ -1,8 +1,10 @@
+""" Simple tkinter visualizer for 2D data """
+""" todo: Refactor to make more reusable """
+
+import threading
 from tkinter import *
 
-from simanneal.Annealer import Annealer
 from simanneal.samples.twodimensional import TwoDimensionalSample
-import threading
 
 master = Tk()
 

@@ -1,7 +1,7 @@
 REQUIRED
 
-0. Submit to GitHub
-1. Unit tests
+DONE-0. Submit to GitHub
+1. Unit tests - Started, some simplistic tests in place
 2. Clean up 1D and 3D samples
 3. Refactor Visualizer
 3. Extend Visualizer to work with 1D and 3D samples
@@ -12,5 +12,6 @@ REQUIRED
 
 OPTIONAL
 
-A. Test with a large data set
-B. Make Visualizer pretty
+A. Import and Export data
+B. Test with a large data set
+C. Make Visualizer pretty

@@ -10,8 +10,8 @@ simanneal/		-	Simulated Annealing Package
 	__init__.py	-	Used by distutils to find the package root, should be empty
 	Annealer.py	-	Core implementation
 	samples/	-	Sample package
-		__init__.py			-	Used by distutils to find the package root, should be empty
-		trivial.py			-	Sample of using Annealer to optimize a small one-dimensional array
+		__init__.py		-	Used by distutils to find the package root, should be empty
+		trivial.py		-	Sample of using Annealer to optimize a small one-dimensional array
 		twodimensional.py	-	Sample of using Annealer to optimize a small two-dimensional array
 		threedimensional.py	-	Guess what this does.
 		visualizer.py		-	tkinter-based visualizer with threading for Annealer results (reusable for other data)

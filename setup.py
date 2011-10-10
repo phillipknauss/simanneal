@@ -1,11 +1,35 @@
-### Copied from http://wiki.python.org/moin/Distutils/Tutorial
+### Copied from http://wiki.python.org/main/Distutils/Tutorial
 
 from distutils.core import setup
+import os
 
-# This is a list of files to install, and where
-# (relative to the 'root' dir, where setup.py is)
-# You could be mroe specific.
+""" find_packages implementation from """
+""" http://wiki.python.org/moin/Distutils/Cookbook/AutoPackageDiscovery """
+
+def is_package(path):
+    return (
+        os.path.isdir(path) and
+        os.path.isfile(os.path.join(path, '__init__.py'))
+        )
+
+def find_packages(path, base="" ):
+    """ Find all packages in path """
+    packages = {}
+    for item in os.listdir(path):
+        dir = os.path.join(path, item)
+        if is_package( dir ):
+            if base:
+                module_name = "%(base)s.%(item)s" % vars()
+            else:
+                module_name = item
+            packages[module_name] = dir
+            packages.update(find_packages(dir, module_name))
+    return packages
+
+
 files = []
+
+packages = find_packages(".")
 
 setup(name = "simanneal",
 	version = "100",
@@ -13,17 +37,13 @@ setup(name = "simanneal",
 	author = "Phillip Knauss",
 	author_email = "phillip.knauss@gmail.com",
 	url = "DEFAULTURL",
-	# Name the folder where your packages live:
-	# (If you have other packages or modules, then
-	# puth them into the main_package directory - they will be found
-	# recursively.)
-	packages = ['simanneal','simanneal/samples'],
-	# 'main_package' must contain files variable
-	# This dict maps the package name=to=> directories
-	# Means that the package requires these files.
+        package_dir = packages,
+	# Automatically find packages
+	packages = packages.keys(),
 	package_data = {'package' : files },
 	#'runner' is in the root.
 	scripts = ["runner"],
 	long_description = """An implementation of the Simulated Annealing heuristic for global optimization""",
 	classifiers = []
 )
+
