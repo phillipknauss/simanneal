@@ -11,7 +11,7 @@ class Sample(object):
         def run(self):
                 """ Runs the annealing process """
                 
-                annealer = Annealer(initialState = self.initialState,
+                annealer = Annealer(state = self.state,
                     maxCount = self.maxCount,
                     minEnergy = self.minEnergy,
                     neighborFunction = self.neighbor,
@@ -23,21 +23,21 @@ class Sample(object):
 
                 return annealer.run()
 
-        def setInitialState(self, state):
+        def setState(self, state):
                 """ Setter for the initial state """
                 """ Anticipate needing this for adding lazy loading and support for data sets too large to hold in memory """
                 
-                self.initialState = state
+                self.state = state
                 
         def neighbor(self, state):
                 """ In this sample, new candidates (neighbor states) are constructed by
                 stepping through the previous state and swapping random elements"""
                 
                 neighbor = copy.deepcopy(state) # Don't mutate the injected state
-                for n in neighbor:
-                        next1 = random.randint(0, len(state)-1)
-                        next2 = random.randint(0, len(state)-1)
-                        neighbor[next1], neighbor[next2] = neighbor[next2], neighbor[next1] # Pythonic swap
+
+                next1 = random.randint(0, len(state)-1)
+                next2 = random.randint(0, len(state)-1)
+                neighbor[next1], neighbor[next2] = neighbor[next2], neighbor[next1] # Pythonic swap
                 return neighbor
 
         def calcDelta(self, energy1, energy2):

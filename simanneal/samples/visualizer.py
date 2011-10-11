@@ -41,12 +41,19 @@ def anneal():
     optimized = sample.run()
     coords = optimized["bestState"]
     drawCoords(coords)
-    lText.set("Done")
+    clear()
+    lText.set("Final energy:" + "{0:.2f}".format(optimized["bestEnergy"]))
+
+def run_threaded(function):
+    t = threading.Thread(target=function)
+    t.setDaemon(True) # kills the thread if parent thread is killed
+    t.start()
+    b.config(state=DISABLED)
+    b2.config(state=DISABLED)
+    b3.config(state=DISABLED)
 
 def anneal_threaded():
-    t = threading.Thread(target=anneal)
-    t.setDaemon(True)
-    t.start()
+    run_threaded(anneal)
 
 def clear():
     w.delete(ALL)
@@ -54,30 +61,92 @@ def clear():
     drawMarks()
 
 def updateProgress(status):
-    lText.set((status["count"]/10000)*100)
-    
+    lText.set("{0:.2f}".format((status["count"]/maxCount)*100))
+
+def updateUIFromSample():
+    clear()
+    drawCoords(sample.state)
+    lText.set("New energy: " + "{0:.2f}".format((sample.E(sample.state))))
+    b.config(state=NORMAL)
+    b2.config(state=NORMAL)
+    b3.config(state=NORMAL)
+
+def improve():
+    "Update initialState with candidates until energy improves once"
+
+    lText.set("Improving...")
+    startEnergy = sample.E(sample.state)
+    energy = startEnergy
+    while energy >= startEnergy:
+        sample.state = sample.neighbor(sample.state)
+        energy = sample.E(sample.state)
+    updateUIFromSample()
+
+def improve_threaded():
+    run_threaded(improve)
+
+def randomize():
+    "Update State to a random order"
+
+    for n in sample.state:
+        sample.state = sample.neighbor(sample.state)
+    updateUIFromSample()  
+
+def randomize_threaded():
+    run_threaded(randomize)
+
 def buildUI():
     global w
     w = Canvas(master, width=200, height=200)
-    w.pack()
+    w.pack(side=TOP)
 
+    global f
+    f = Frame(master)
+        
     global b
-    b = Button(master, text="Anneal", command=anneal_threaded)
-    b.pack()
+    b = Button(f, text="Anneal", command=anneal_threaded)
+    b.pack(side=LEFT)
 
     global b2
-    b2 = Button(master, text="Clear", command=clear)
-    b2.pack()
+    b2 = Button(f, text="Improve", command=improve_threaded)
+    b2.pack(side=LEFT)
+
+    global b3
+    b3 = Button(f, text="Randomize", command=randomize_threaded)
+    b3.pack(side=LEFT)
+
+    f.pack(side=TOP)
 
     global l
     global lText
     lText = StringVar()
     l = Label(master, textvariable=lText)
-    l.pack()
+    l.pack(side=TOP)
+
+def drawInitialState(coords):
+    """ Separate function so we can apply color or something differently """
+
+    drawCoords(coords);
 
 buildUI()
-sample = TwoDimensionalSample()
-sample.reportPeriod = 500
-sample.reportFunction = updateProgress
 clear()
+global sample
+sample = TwoDimensionalSample()
+# This is where we set the data
+#initialState = [(0,12), (1,2), (2,14), (3,0), (4,5), (5,13), (6,6), (7,8), (8,3), (9,10), (10,4), (11,11), (12,7), (13,9), (14,1)];
+initialState = [(0,4), (1,3), (2,2), (3,1), (4,0), (5,1), (6,2), (7,3), (8,4), (9,3), (10,2), (11,1), (12,0), (13,1), (14,2), (15,3), (16,4)];
+sample.state = initialState
+drawInitialState(sample.state);
+lText.set("Initial energy: " + "{0:.2f}".format(sample.E(sample.state)))
+global maxCount
+maxCount = 1000000
+sample.maxCount = maxCount
+sample.reportPeriod = maxCount/100
+sample.reportFunction = updateProgress
+
+""" alpha determines how quickly the temperature falls off
+With a small data set with few or no local minima that are not global minima, set this high to find results quickly
+With a large data set which may have local non-global minima, set this low to allow more time be able to step backwards """ 
+sample.alpha = 0.9 # Temp should fall off quickly
+
 mainloop()

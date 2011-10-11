@@ -12,7 +12,7 @@ class ThreeDimensionalSample(Sample):
                 self.initialTemp = 1
                 self.maxCount = 10000
                 self.minEnergy = 0
-                self.setInitialState( [(0,12,14), (1,2,13), (2,14,12), (3,0,11), (4,5,10), (5,13,9), (6,6,8), (7,8,7), (8,3,6), (9,10,5), (10,4,4), (11,11,3), (12,7,2), (13,9,1), (14,1,0)] )
+                self.setState( [(0,12,14), (1,2,13), (2,14,12), (3,0,11), (4,5,10), (5,13,9), (6,6,8), (7,8,7), (8,3,6), (9,10,5), (10,4,4), (11,11,3), (12,7,2), (13,9,1), (14,1,0)] )
 
         def calcDistance(self, left, right):
                 """ Simple implementation of calculating the distance between two 2D points

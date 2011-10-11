@@ -4,7 +4,7 @@ class Annealer:
         """ An implementation of the Simulated Annealing metaheuristic """
         
         def __init__(self,
-                     initialState=None,
+                     state=None,
                      maxCount=None,
                      minEnergy=None,
                      neighborFunction=None,
@@ -15,7 +15,7 @@ class Annealer:
                      reportFunction=None):
 
                 # These are all input variables and are not modified by Annealer
-                self.initialState = initialState
+                self.state = state
                 self.maxCount = maxCount
                 self.minEnergy = minEnergy
                 self.neighborFunction = neighborFunction
@@ -26,37 +26,36 @@ class Annealer:
                 self.reportFunction = reportFunction
 
                 # Encapsulate random values so we can unit test around them
-                self.getRandom = lambda x: random.random()
+                self.getRandom = lambda : random.random()
                 
         def run(self):
                 """ Main loop """
                 
                 try:
-                        self.state = self.initialState
-                        self.energy = self.energyFunction(state)
+                        self.energy = self.energyFunction(self.state)
                         self.bestState = 0
-                        self.bestEnergy = energy
+                        self.bestEnergy = self.energy
                         count = 0
-                        while count < self.maxCount and energy > self.minEnergy:
-                                newState = self.neighborFunction(state)
+                        while count < self.maxCount and self.energy > self.minEnergy:
+                                newState = self.neighborFunction(self.state)
                                 newEnergy = self.energyFunction(newState)
                                 newTemp = self.temperatureFunction(count/self.maxCount)
 
-                                self._updateCandidate(energy, newEnergy, newTemp, newState)       
+                                self._updateCandidate(self.energy, newEnergy, newTemp, newState)       
                                 self._updateBest(newState, newEnergy)
                                 
                                 count = count + 1 # Internal to the method, so we don't need any lock code
 
-                                self._report()
+                                self._report(count, newEnergy, newState, newTemp)
                                 
-                        return _createStatus(count, energy, state, newTemp)       
+                        return self._createStatus(count, self.energy, self.state, newTemp)       
                 except AttributeError:
                         print("Missing attributes.")
 
         def _updateCandidate(self, currentEnergy, newEnergy, temperature, newState):
                 """ Compares the acceptance probability to a random value and updates the candidate if necessary """
                 
-                if self.acceptanceProbabilityFunction(energy, newEnergy, temperature) > self.getRandom():
+                if self.acceptanceProbabilityFunction(self.energy, newEnergy, temperature) > self.getRandom():
                         self.state = newState
                         self.energy = newEnergy
 
