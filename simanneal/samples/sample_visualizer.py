@@ -1,5 +1,4 @@
-""" Simple tkinter visualizer for 2D data """
-""" todo: Refactor to make more reusable """
+""" Sample of simulated annealing using simanneal and visualizer modules """
 
 import threading
 import time
@@ -10,6 +9,7 @@ import math
 from tkinter import *
 
 from twodimensional import TwoDimensionalSample
+from simanneal.timer import Timer
 from simanneal.visualizer import GUI
 
 global window  
@@ -19,20 +19,15 @@ class Application(object):
         self.sample = TwoDimensionalSample()
         self.sample.reportFunction = self.updateProgress
 
-        # Tkinter has issues with the Tk() instance being in a class context,
-        # so doing something terrible with it
-        global master
-        master = Tk()
-
         self.buildUI(self.sample)
         self.window.clearCanvas()
         self.genRandom(100)
 
-        master.mainloop()
+        self.window.master.mainloop()
 
     def buildUI(self, sample):
     
-        self.window = GUI(sample)
+        self.window = GUI()
             
         self.window.addSetting("xMargin","10")
         self.window.addSetting("yMargin","10")
@@ -45,17 +40,17 @@ class Application(object):
         self.window.addSetting("reportPeriod","1000")
         self.window.addSetting("alpha","1")
     
-        f0 = self.window.addFrame("data_import_export", Frame(master))
+        f0 = self.window.addFrame("data_import_export", Frame(self.window.master))
         self.window.addButton("import", Button(f0, text="Import Data", command=lambda : self.window.run_threaded(self.import_data)))
         self.window.addButton("export", Button(f0, text="Export Data", command=lambda : self.window.run_threaded(self.export_data)))
-        f1 = self.window.addFrame("json_import_export", Frame(master))
+        f1 = self.window.addFrame("json_import_export", Frame(self.window.master))
         self.window.addButton("import_json", Button(f1, text="Import JSON", command=lambda : self.window.run_threaded(self.import_json)))
         self.window.addButton("export_json", Button(f1, text="Export JSON", command=lambda : self.window.run_threaded(self.export_json)))
-        f2 = self.window.addFrame("generators", Frame(master))
+        f2 = self.window.addFrame("generators", Frame(self.window.master))
         self.window.addButton("parabolic", Button(f2, text="Parabolic", command=lambda : self.window.run_threaded(self.parabolic)))
         self.window.addButton("cubic", Button(f2, text="Cubic", command=lambda : self.window.run_threaded(self.cubic)))
         self.window.addButton("random", Button(f2, text="Random", command=lambda : self.window.run_threaded(self.randomize)))
-        f3 = self.window.addFrame("actions", Frame(master))
+        f3 = self.window.addFrame("actions", Frame(self.window.master))
         self.window.addButton("anneal", Button(f3, text="Anneal", command=lambda : self.window.run_threaded(self.anneal)))
         self.window.addButton("improve", Button(f3, text="Improve", command=lambda : self.window.run_threaded(self.improve)))
         stopButton = Button(f3, text="Stop", command=self.stop, state=DISABLED)
@@ -70,7 +65,7 @@ class Application(object):
     def stop(self):
         # This sometimes crashes the python runtime... needs to be fixed
         self.sample.stop()
-        self.window.updateUIFromSample()
+        self.updateUIFromSample()
         
     def anneal(self):
         print("anneal")
@@ -101,11 +96,10 @@ class Application(object):
         self.window.statusText.set("Improving...")
         startEnergy = self.sample.E(self.sample.state)
         energy = startEnergy
-        while energy >= startEnergy:
+        print(self.sample.annealer.stop)
+        while energy >= startEnergy and self.sample.annealer.stop is not True:
             self.sample.state = self.sample.neighbor(self.sample.state)
             energy = self.sample.E(self.sample.state)
-            if self.sample.annealer.stop == True:
-                break
             
         self.updateUIFromSample()
 
