@@ -9,18 +9,21 @@ class Sample(object):
         """ Base class for simulated annealing samples """
         """ Child methods should override these methods as appropriate to their needs """
 
+        def __init__(self):
+                self.annealer = Annealer()
+
         def run(self):
                 """ Runs the annealing process """
                 
-                self.annealer = Annealer(state = self.state,
-                    maxCount = self.maxCount,
-                    minEnergy = self.minEnergy,
-                    neighborFunction = self.neighbor,
-                    energyFunction = self.E,
-                    temperatureFunction = self.temp,
-                    acceptanceProbabilityFunction = self.P,
-                    reportPeriod = self.reportPeriod,
-                    reportFunction = self.reportFunction)
+                self.annealer.state = self.state
+                self.annealer.maxCount = self.maxCount
+                self.annealer.minEnergy = self.minEnergy
+                self.annealer.neighborFunction = self.neighbor
+                self.annealer.energyFunction = self.E
+                self.annealer.temperatureFunction = self.temp
+                self.annealer.acceptanceProbabilityFunction = self.P
+                self.annealer.reportPeriod = self.reportPeriod
+                self.annealer.reportFunction = self.reportFunction
 
                 return self.annealer.run()
 
