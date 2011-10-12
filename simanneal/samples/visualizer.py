@@ -31,9 +31,10 @@ def updateProgress(status):
     elapsed = time.clock()
     window.statusText.set("Elapsed: {0:.2f}".format(elapsed-window.timer.lastStart) + "(" + "{0:.2f}".format(status["bestEnergy"]) + ")")
     
-    if window.sample.state != status["bestState"]:
+    if window.sample.state != status["bestState"] and status["bestState"] is list:
         window.sample.state = status["bestState"]
         window.clearCanvas()
+        print(status["bestState"])
         window.drawCoords(status["bestState"])
 
 def improve():
