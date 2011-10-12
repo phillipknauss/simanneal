@@ -31,26 +31,28 @@ class Annealer:
         def run(self):
                 """ Main loop """
                 
-                try:
-                        self.energy = self.energyFunction(self.state)
-                        self.bestState = 0
-                        self.bestEnergy = self.energy
-                        count = 0
-                        while count < self.maxCount and self.energy > self.minEnergy:
-                                newState = self.neighborFunction(self.state)
-                                newEnergy = self.energyFunction(newState)
-                                newTemp = self.temperatureFunction(count/self.maxCount)
-
-                                self._updateCandidate(self.energy, newEnergy, newTemp, newState)       
-                                self._updateBest(newState, newEnergy)
+                self.energy = self.energyFunction(self.state)
+                self.bestState = 0
+                self.bestEnergy = self.energy
+                count = 0
+                newTemp = 0
+                self.stop = None
+                while count < self.maxCount and self.energy > self.minEnergy:
+                        newState = self.neighborFunction(self.state)
+                        newEnergy = self.energyFunction(newState)
+                        newTemp = self.temperatureFunction(count/self.maxCount)
+                        
+                        self._updateCandidate(self.energy, newEnergy, newTemp, newState)       
+                        self._updateBest(newState, newEnergy)
                                 
-                                count = count + 1 # Internal to the method, so we don't need any lock code
+                        count = count + 1 # Internal to the method, so we don't need any lock code
 
-                                self._report(count, newEnergy, newState, newTemp)
+                        self._report(count, newEnergy, newState, newTemp)
+
+                        if (self.stop is not None):
+                                break
                                 
-                        return self._createStatus(count, self.energy, self.state, newTemp)       
-                except AttributeError:
-                        print("Missing attributes.")
+                return self._createStatus(count, self.bestEnergy, self.bestState, newTemp)       
 
         def _updateCandidate(self, currentEnergy, newEnergy, temperature, newState):
                 """ Compares the acceptance probability to a random value and updates the candidate if necessary """

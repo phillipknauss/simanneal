@@ -14,6 +14,7 @@ class TwoDimensionalSample(Sample):
                 self.initialTemp = 1
                 self.maxCount = 10000
                 self.minEnergy = 0
+                super().__init__()
 
         def calcDistance(self, left, right):
                 """ Simple implementation of calculating the distance between two 2D points

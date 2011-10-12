@@ -1,6 +1,7 @@
 import math
 import copy
 import random
+import sys
 
 from simanneal.Annealer import Annealer
 
@@ -11,7 +12,7 @@ class Sample(object):
         def run(self):
                 """ Runs the annealing process """
                 
-                annealer = Annealer(state = self.state,
+                self.annealer = Annealer(state = self.state,
                     maxCount = self.maxCount,
                     minEnergy = self.minEnergy,
                     neighborFunction = self.neighbor,
@@ -21,8 +22,11 @@ class Sample(object):
                     reportPeriod = self.reportPeriod,
                     reportFunction = self.reportFunction)
 
-                return annealer.run()
+                return self.annealer.run()
 
+        def stop(self):
+                self.annealer.stop = True
+        
         def setState(self, state):
                 """ Setter for the initial state """
                 """ Anticipate needing this for adding lazy loading and support for data sets too large to hold in memory """
@@ -50,21 +54,32 @@ class Sample(object):
                 For this implementation, we determine the energy by determining the sum of the distances between each node """
                 
                 total = 0
+                if state==0: # Invalid state has no energy
+                        return 0
                 for i in range(len(state)-1):
                         total += self.calcDistance(state[i+1], state[i])
                 return total
 
-        def temp(self, countPercent):
+        def temp(self, numIterations):
                 """ Determine the temperature based on number of iterations """
+
+                denom = numIterations*self.alpha
                 
-                return self.initialTemp - (countPercent * self.alpha)
+                return 1/denom if denom > 0 else 0
 
         def P(self, energy, newEnergy, temperature):
                 """ Calculate the probability of switching to the new state """
                 """ This is the decision-rule, adapted from Nascimento, et al., 2009 (See references) """
                 
                 delta = self.calcDelta(newEnergy, energy)
-                return math.exp(delta/temperature) if temperature > 0 else 1 # Is math.expm1 better for this?
+
+                minTemp = 0.00001 # use minimum to avoid div/0 and buffer overflow
+                try:
+                        return minTemp if temperature==0 else math.exp((round(delta,2)/round(temperature,2))) if temperature > minTemp else 1 # Is math.expm1 better for this?
+                except OverflowError as detail:
+                        print("Overflow:","delta=",round(delta,2),"temp=",round(temperature,2))
+                        return minTemp
+                
 
         def calcDistance(self, left, right):
                 """ Works for simple values (float, int, etc),
