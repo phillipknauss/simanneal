@@ -1,3 +1,5 @@
+""" Simple 2D plot visualizer """
+
 import threading
 import time
 import pickle
@@ -6,35 +8,19 @@ import random
 import math
 from tkinter import *
 
-class Timer(object):
-
-    def __init__(self):
-        self.lastStart = None
-        self.laststop = None
-        self.runTime = None
-    
-    def startClock(self):
-        self.lastStart = time.clock()
-    
-    def stopClock(self):
-        if self.lastStart is None:
-            return
-        self.lastStop = time.clock()
-        self.runTime = self.lastStop - self.lastStart
-        print("Run duration: ", self.runTime)
+from simanneal.timer import Timer
 
 class GUI(object):
-    def __init__(self, application):
-        self.application = application
-        application.window = self
-        self.canvas = Canvas(master, width=200, height=200)
+    def __init__(self):
+        
+        self.master = Tk()
+        self.canvas = Canvas(self.master, width=200, height=200)
         self.frames = []
         self.settings = []
         self.buttons = []
         self.invertedAvailabilityButtons = []
-        #self.sample = application.sample
         self.statusText = StringVar()
-        self.statusBar = Label(master, textvariable=self.statusText)
+        self.statusBar = Label(self.master, textvariable=self.statusText)
         self.timer = Timer()        
 
     def build(self):
@@ -52,7 +38,7 @@ class GUI(object):
         return control
 
     def addSetting(self, name, default):
-        frame = Frame(master)
+        frame = Frame(self.master)
         label = Label(frame, text=name)
         entry = Entry(frame)
         entry.insert(0,default)
@@ -68,7 +54,9 @@ class GUI(object):
 
     def getInt(self, name):
         val = self.getSettingValue(name)
-        return int(val) if val is not None else 0
+        if val is None:
+            return 0
+        return int(val)
 
     def getFloat(self, name):
         val = self.getSettingValue(name)
