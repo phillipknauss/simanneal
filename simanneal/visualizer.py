@@ -124,8 +124,6 @@ class GUI(object):
             self.canvas.create_line(pt1[0],pt1[1],pt2[0],pt2[1])
 
     def drawCoords(self,coords):
-        if coords is int:
-            return;
         for i in range(len(coords)-1):
             pos1 = self.coordToScreen(coords[i])
             pos2 = self.coordToScreen(coords[i+1])

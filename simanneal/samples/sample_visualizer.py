@@ -94,13 +94,20 @@ class Application(object):
 
         print("improve")
         self.window.statusText.set("Improving...")
-        startEnergy = self.sample.E(self.sample.state)
+        startState = self.sample.state
+        startEnergy = self.sample.E(startState)
         energy = startEnergy
-        print(self.sample.annealer.stop)
-        while energy >= startEnergy and self.sample.annealer.stop is not True:
+        
+        while energy >= startEnergy:
             self.sample.state = self.sample.neighbor(self.sample.state)
             energy = self.sample.E(self.sample.state)
-            
+            if self.sample.annealer.stop is True:
+                self.sample.annealer.stop = None
+                break;
+
+        if energy > startEnergy:
+            self.sample.state = startState
+            self.sample.energy = startEnergy
         self.updateUIFromSample()
 
     def parabolic(self):

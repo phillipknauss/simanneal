@@ -3,14 +3,14 @@ import copy
 import random
 import sys
 
-from simanneal.Annealer import Annealer
+from simanneal.annealer import annealer
 
 class Sample(object):
         """ Base class for simulated annealing samples """
         """ Child methods should override these methods as appropriate to their needs """
 
         def __init__(self):
-                self.annealer = Annealer()
+                self.annealer = annealer()
 
         def run(self):
                 """ Runs the annealing process """

@@ -1,6 +1,6 @@
 import random # Prefer including namespace in calls rather than importing into the current namespace
 
-class Annealer:
+class annealer:
         """ An implementation of the Simulated Annealing metaheuristic """
         
         def __init__(self,
@@ -50,6 +50,7 @@ class Annealer:
                         self._report(count, newEnergy, newState, newTemp)
 
                         if (self.stop is not None):
+                                self.stop = None
                                 break
                                 
                 return self._createStatus(count, self.bestEnergy, self.bestState, newTemp)       
