@@ -41,8 +41,7 @@ setup(name = "simanneal",
 	# Automatically find packages
 	packages = packages.keys(),
 	package_data = {'package' : files },
-	#'runner' is in the root.
-	scripts = ["runner"],
+	scripts = [],
 	long_description = """An implementation of the Simulated Annealing heuristic for global optimization""",
 	classifiers = []
 )
