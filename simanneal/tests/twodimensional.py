@@ -29,9 +29,9 @@ class TwoDimensionalSampleTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_temp(self):
-        expected = 0.4
+        expected = 16666
         actual = self.sample.temp(1);
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected, int(actual))
 
     def test_P(self):
         expected = 1.0
