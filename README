@@ -2,10 +2,10 @@ A reusable implementation of the Simulated Annealing metaheuristic for optimizat
 
 Installation:
 
-1. Run build.bat (creates dist/ folder if absent)
+1. Run build.bat (Windows) or build.sh (unix) (creates dist/ folder if absent)
 2. Change to dist/ and unpack compressed distribution
 3. Change to unpacked distribution folder
-4. run: setup.py install
+4. run: sudo python setup.py install
 
 This will install the simaneal package to Libs/site-packages
 
@@ -28,3 +28,7 @@ simanneal/		-	Simulated Annealing Package
 	tests/		-	Unit tests
 		Annealer.py			- Unit tests for the core Annealer module
 		twodimensional.py	- Unit tests for Sample, as implemented in twodimesional (yeah, unusual)
+
+Interesting samples:
+    - simanneal/samples/twodimensional.py - Command line run of simulated annealing in two dimensions using random starting data and interesting default values.
+    - simanneal/samples/sample_visualizer.py - tkinter-based UI. Use 'random' to generate a random starting state or import some JSON data to start. the 'improve' button runs until the total energy of the system improves once. The 'anneal' button runs until a maximum energy threshold is reached. Requires tk to be installed on the host system.

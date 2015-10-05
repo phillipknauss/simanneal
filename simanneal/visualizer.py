@@ -6,7 +6,7 @@ import pickle
 import json
 import random
 import math
-from tkinter import *
+from Tkinter import *
 
 from simanneal.timer import Timer
 
